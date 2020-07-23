@@ -21,7 +21,7 @@ namespace Microsoft.Azure.Cosmos.Performance.Tests
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using System.IO;
 
-    internal class MockDocumentClient : DocumentClient, ICosmosAuthorizationTokenProvider
+    internal class MockDocumentClient : DocumentClient, IAuthorizationTokenProvider
     {
         Mock<ClientCollectionCache> collectionCache;
         Mock<PartitionKeyRangeCache> partitionKeyRangeCache;
@@ -87,13 +87,13 @@ namespace Microsoft.Azure.Cosmos.Performance.Tests
             return Task.FromResult(this.partitionKeyRangeCache.Object);
         }
 
-        string ICosmosAuthorizationTokenProvider.GetUserAuthorizationToken(
+        string IAuthorizationTokenProvider.GetUserAuthorizationToken(
             string resourceAddress,
             string resourceType,
             string requestVerb,
             INameValueCollection headers,
             AuthorizationTokenType tokenType,
-            out MemoryStream payload) // unused, use token based upon what is passed in constructor 
+            out string payload) // unused, use token based upon what is passed in constructor 
         {
             // this is masterkey authZ
             headers[HttpConstants.HttpHeaders.XDate] = DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture);
